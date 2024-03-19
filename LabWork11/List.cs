@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibraryLab10;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,22 +10,18 @@ namespace LabWork11
     internal class List<T>
     {
         T[] list;
-        int capacity; // Выделеное кол-во памяти под массив (С запасом)
-        int count; // Реальное кол-во объектов в массиве
+        int capacity; // Выделенное количество памяти под массив (с запасом)
+        int count; // Реальное количество объектов в массиве
 
         // Свойства Capacity
         public int Capacity
         {
-            get => list.Length; // Возвращаем размер массива
-            private set => capacity = value; // Возможность установки значения длинны
+            get => capacity; // Возвращаем выделенное количество памяти
+            private set => capacity = value; // Возможность установки значения длины
         }
-
-
 
         // Считаем сколько реальных элементов в массиве
         public int Count { get => count; }
-
-
 
         // Конструктор без параметров (Создаем пустой массив)
         public List()
@@ -32,7 +29,6 @@ namespace LabWork11
             Capacity = 0;
             list = new T[Capacity];
         }
-
 
         // Конструктор - перезаписываем элементы в массив
         public List(params T[] list)
@@ -47,7 +43,6 @@ namespace LabWork11
             }
         }
 
-
         // Индексатор
         public T this[int index]
         {
@@ -61,7 +56,7 @@ namespace LabWork11
             }
         }
 
-        // Метод добавления 1 элемента в массив (При необх. увеличиваем длинну массива в 2 раза)
+        // Метод добавления 1 элемента в массив (При необходимости увеличиваем длину массива в 2 раза)
         public void Add(T item)
         {
             if (item == null) { throw new ArgumentException(); }
@@ -80,5 +75,43 @@ namespace LabWork11
                 list = temp;
             }
         }
+
+        // Метод удаления элемента по индексу
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index >= Count) { throw new ArgumentOutOfRangeException(); }
+
+            for (int i = index; i < Count - 1; i++)
+            {
+                list[i] = list[i + 1];
+            }
+
+            list[Count - 1] = default(T);
+            count--;
+        }
+
+        // Метод клонирования списка
+        public List<T> Clone()
+        {
+            List<T> clonedList = new List<T>();
+            for (int i = 0; i < Count; i++)
+            {
+                clonedList.Add(this[i]);
+            }
+            return clonedList;
+        }
+
+        // Метод сортировки списка
+        public void Sort()
+        {
+            Array.Sort(list, 0, Count);
+        }
+
+        // Метод поиска элемента в списке
+        public int Find(T item)
+        {
+            return Array.IndexOf(list, item, 0, Count);
+        }
     }
 }
+
